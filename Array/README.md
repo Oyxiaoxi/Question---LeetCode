@@ -156,3 +156,31 @@ class Solution {
 + 4.如果 nums1 的大小比 nums2 小很多，哪种方法更优？
 + 5.如果 nums2 的元素存储在磁盘上，内存是有限的，你不能一次加载所有的元素到内存中，你该怎么办？
 
+#### 思路
++ 哈希表来解决问题，将数组nums1哈希到哈希表中，然后继续将数组nums2哈希到哈希表中，如果发生哈希碰撞则统计加1，最后可以得出数组的交集。时间复杂度也就是哈希所有元素的复杂度O(n)。这里我使用HashMap来处理
+
+#### 代码
+```java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        ArrayList<Integer> temp = new ArrayList<>();
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < nums1.length; i++) {
+            Integer value = hashMap.get(nums1[i]);
+            hashMap.put(nums1[i], (value == null ? 0 : value) + 1);
+        }
+
+        for (int i = 0; i < nums2.length; i++) {
+            if (hashMap.containsKey(nums2[i]) && hashMap.get(nums2[i]) != 0) {
+                temp.add(nums2[i]);
+                hashMap.put(nums2[i], hashMap.get(nums2[i]) - 1);
+            }
+        }
+        int[] result = new int[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            result[i] = temp.get(i);
+        }
+        return result;
+    }
+}
+```
